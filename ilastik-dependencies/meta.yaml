@@ -3,16 +3,29 @@
 {% endif %}
 {% set WITH_SOLVERS = WITH_SOLVERS|int %}
 
+{% if not WITH_GUI is defined %}
+  {% set WITH_GUI = 1 %}
+{% endif %}
+{% set WITH_GUI = WITH_GUI|int %}
+
 package:
-  {% if WITH_SOLVERS %}
-    name: ilastik-dependencies
+  {% if WITH_GUI %}
+    {% if WITH_SOLVERS %}
+      name: ilastik-dependencies
+    {% else %}
+      name: ilastik-dependencies-no-solvers
+    {% endif %}
   {% else %}
-    name: ilastik-dependencies-no-solvers
+    {% if WITH_SOLVERS %}
+      name: ilastik-dependencies-no-gui
+    {% else %}
+      name: ilastik-dependencies-no-solvers-no-gui
+    {% endif %}
   {% endif %}
-    version: 1.3
+      version: 1.3
 
 build:
-  number: 4
+  number: 5
   track_features:
     # on osx we need to make sure that we install the numpy versions with openblas instead of mkl to prevent clashes with cplex
     - blas_openblas #[osx] 
@@ -37,9 +50,6 @@ requirements:
     - networkx                  1.11          # TODO API change in 2.0
     - nose                      
     - psutil                    
-    - pyqt                      5.6*
-    - pyqtgraph
-    - pyopengl
     - python-dateutil                
     - pytz                      
     - qimage2ndarray            
@@ -51,7 +61,13 @@ requirements:
     - setuptools                
     - matplotlib
     - mkl                       2017.0.3*      # [win]
-    
+
+{% if WITH_GUI %}
+    - pyqt                      5.6*
+    - pyqtgraph
+    - pyopengl
+{% endif %}
+
     # -----------------------------------------------------------------
     # packages built by us
     # -----------------------------------------------------------------
@@ -95,7 +111,6 @@ requirements:
     - nifty-with-cplex
     - nifty-with-gurobi
 {% endif %}
-    
 
 test:
   # Just give SOME test to ensure that the package can be installed at all.
