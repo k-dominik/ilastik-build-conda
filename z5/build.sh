@@ -19,8 +19,15 @@ cd build
 CXXFLAGS="${CXXFLAGS} -I${PREFIX}/include"
 LDFLAGS="${LDFLAGS} -Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib"
 
+_OLD_ABI=OFF
 if [ $(uname) == Darwin ]; then
     CXXFLAGS="$CXXFLAGS -stdlib=libc++"
+else
+    # The use old abi stuff can be removed once all packages on conda-forge
+    # have been rebuild with gcc >= 5
+    if [[ ${DO_NOT_BUILD_WITH_CXX11_ABI} == '1' ]]; then
+        _OLD_ABI=ON
+    fi
 fi
 
 # Set the correct python flags, depending on the distribution
@@ -49,7 +56,7 @@ cmake .. \
         -DWITH_BZIP2=ON \
         -DWITH_XZ=ON \
 \
-        -DUSE_OLD_ABI=ON \
+        -DUSE_OLD_ABI="${_OLD_ABI}" \
 \
         -DPYTHON_EXECUTABLE=${PYTHON} \
         -DPYTHON_LIBRARY=${PREFIX}/lib/libpython${PY_ABI}.${DYLIB} \
