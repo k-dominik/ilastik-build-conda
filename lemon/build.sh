@@ -16,19 +16,8 @@
 #
 #    For more information, see https://gcc.gnu.org/bugzilla/show_bug.cgi?format=multiple&id=66509
 
-
-if [[ `uname` == 'Darwin' ]]; then
-    LEMON_CXX_FLAGS="${CXXFLAGS}"
-    # Pursuant to Item 2 above, replace the tools/CMakeLists.txt with an empty file.
-    echo "" > tools/CMakeLists.txt
-else
-    LEMON_CXX_FLAGS="${CXXFLAGS}"
-fi
-
 mkdir build
 cd build
-
-echo CXX_LDFLAGS=$CXX_LDFLAGS
 
 cmake .. \
     -DBUILD_SHARED_LIBS=ON \
@@ -37,24 +26,28 @@ cmake .. \
     -DGLPK_LIBRARY= \
     -DGLPK_INCLUDE_DIR= \
     -DGLPK_ROOT_DIR= \
-    -DCMAKE_CXX_FLAGS="${LEMON_CXX_FLAGS}" \
+#    -DCMAKE_CXX_FLAGS="${LEMON_CXX_FLAGS}" \
 #    -DCMAKE_CXX_LINKER_FLAGS="${CXX_LDFLAGS}"
 
 VERBOSE=1 make -j${CPU_COUNT}
 
 # TEST (before install)
-(
-    # (Since conda hasn't performed its link step yet, we must 
-    #  help the tests locate their dependencies via LD_LIBRARY_PATH)
-    if [[ `uname` == 'Darwin' ]]; then
-        export DYLD_FALLBACK_LIBRARY_PATH="$PREFIX/lib":"${DYLD_FALLBACK_LIBRARY_PATH}"
-    else
-        export LD_LIBRARY_PATH="$PREFIX/lib":"${LD_LIBRARY_PATH}"
-    fi
+# (
+#     # (Since conda hasn't performed its link step yet, we must 
+#     #  help the tests locate their dependencies via LD_LIBRARY_PATH)
+#     if [[ `uname` == 'Darwin' ]]; then
+#         export DYLD_FALLBACK_LIBRARY_PATH="$PREFIX/lib":"${DYLD_FALLBACK_LIBRARY_PATH}"
+#     else
+#         export LD_LIBRARY_PATH="$PREFIX/lib":"${LD_LIBRARY_PATH}"
+#     fi
     
-    # Run the tests
-    make -j${CPU_COUNT} check
-)
+#     # Run the tests
+#     make -j${CPU_COUNT} check
+# )
+
+make error_test bfs_test
+./test/error_test
+./test/bfs_test
 
 # "install" to the build prefix (conda will relocate these files afterwards)
 make install
