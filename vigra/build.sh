@@ -25,11 +25,16 @@ cmake ..\
 \
         -DAUTOEXEC_TESTS=0 \
 \
+        -DWITH_BOOST_THREAD=1 \
         -DDEPENDENCY_SEARCH_PREFIX=${PREFIX} \
         -DCMAKE_PREFIX_PATH=${PREFIX} \
 \
+        -DBoost_INCLUDE_DIR=${PREFIX}/include \
+        -DBoost_LIBRARY_DIRS=${PREFIX}/lib \
+        -DBoost_PYTHON_LIBRARY=${PREFIX}/lib/libboost_python${CONDA_PY}${SHLIB_EXT} \
+\
         -DWITH_LEMON=1 \
-        -DLEMON_LIBRARY=${PREFIX}/lib/libemon${SHLIB_EXT} \
+#        -DLEMON_LIBRARY=${PREFIX}/lib/libemon${SHLIB_EXT} \
 \
 
 # BUILD

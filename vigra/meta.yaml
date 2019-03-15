@@ -15,7 +15,8 @@ package:
 source:
   git_url: https://github.com/ukoethe/vigra
   git_tag: HEAD
-
+  patches:
+    - 0001-don-t-link-lemon.patch
 build:
   number: 1000
   string: np{{CONDA_NPY}}py{{CONDA_PY}}_{{PKG_BUILDNUM}}_h{{PKG_HASH}}_g{{GIT_FULL_HASH[:7]}}
