@@ -9,11 +9,12 @@ source:
   md5: fd89e8bf5035b02e2622a48ac7fe0641
 
   patches:
-    - lemon.patch
+  #   - lemon.patch
     - lemon-test.patch
+    - 0001-fix-build.patch
 
 build:
-  number: 1000
+  number: 1002
 requirements:
   build:
     - cmake
