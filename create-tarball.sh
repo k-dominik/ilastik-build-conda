@@ -84,8 +84,7 @@ fi
 
 echo "Creating new ${RELEASE_ENV_NAME} environment using ${EVERYTHING_PKG}"
 echo "environment location: ${RELEASE_ENV}"
-conda create -q -y -n ${RELEASE_ENV_NAME} ${EVERYTHING_PKG} --override-channels "$@"
-conda install -y -n ${RELEASE_ENV_NAME} -c kdominik ilastik-install
+conda create -q -y -n ${RELEASE_ENV_NAME} ${EVERYTHING_PKG} ilastik-install --override-channels "$@" -c kdominik
 
 if [[ $USE_GIT_LATEST == 1 ]]; then
     # Instead of keeping the version from binstar, get the git repo

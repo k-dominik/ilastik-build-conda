@@ -65,10 +65,10 @@ export FONTCONFIG_PATH="${PREFIX}/etc/fonts/"
 export FONTCONFIG_FILE="${PREFIX}/etc/fonts/fonts.conf"
 
 # do the installation step:
-if [ -f ${PREFIX}/. ]; then
-    echo "Doing installation step..."
-    "${PREFIX}/bin/python -m ilastik_install ${PREFIX}"
-    rm -f ${PREFIX}/.prefix_previous
+if [[ $(uname) != "Darwin" ]]; then
+    if [ -f ${PREFIX}/. ]; then
+        "${PREFIX}/bin/python" "${PREFIX}/lib/python3.7/site-packages/ilastik_install/cli.py" "${PREFIX}"
+    fi
 fi
 
 # Launch the ilastik entry script, and pass along any commmand line args.
